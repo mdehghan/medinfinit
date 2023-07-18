@@ -122,6 +122,7 @@ def openAIChat(user_prompt, is_user_prompt):
     )
     return openAIChat("", False)
 
+  st.write(response.content)
   parsed_response = output_parser.parse(response.content)
   return parsed_response.get('translated_response')
 
