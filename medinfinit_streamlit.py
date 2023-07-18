@@ -8,7 +8,7 @@ from langchain.output_parsers import StructuredOutputParser, ResponseSchema
 
 openai_api_key = st.sidebar.text_input('OpenAI API Key')
 
-st.title("MEDInfinit Assistant Chatbot")
+st.title("MEDinfinit Assistant Chatbot")
 
 MODEL_NAME = "gpt-4-0613"
 
