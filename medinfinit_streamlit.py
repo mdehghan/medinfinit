@@ -85,7 +85,6 @@ recommender_function = {
 def reset_session():
     st.session_state.messages = []
     st.session_state.openai_messages = [{"role": "system", "content": system_prompt}]
-    st.session_state.content = []
 
 # Initialize chat history
 if "messages" not in st.session_state or "openai_messages" not in st.session_state:
