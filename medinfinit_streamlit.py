@@ -10,14 +10,6 @@ openai_api_key = st.sidebar.text_input('OpenAI API Key')
 
 st.title("MEDinfinit Assistant Chatbot")
 
-def reset_session():
-    st.session_state.messages = []
-    st.session_state.openai_messages = [{"role": "system", "content": system_prompt}]
-
-# Initialize chat history
-if "messages" not in st.session_state or "openai_messages" not in st.session_state:
-    reset_session()
-
 MODEL_NAME = "gpt-4-0613"
 
 if not openai_api_key.startswith('sk-'):
@@ -68,6 +60,14 @@ system_prompt = PromptTemplate(
     template=template,
     partial_variables={"format_instructions": format_instructions}
 ).format()
+
+def reset_session():
+    st.session_state.messages = []
+    st.session_state.openai_messages = [{"role": "system", "content": system_prompt}]
+
+# Initialize chat history
+if "messages" not in st.session_state or "openai_messages" not in st.session_state:
+    reset_session()
 
 def recommendTherapist(symptoms):
   # TODO(mdehghan): Fix this to return real results.
