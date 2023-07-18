@@ -88,7 +88,7 @@ def reset_session():
     st.session_state.content = []
 
 # Initialize chat history
-if "messages" not in st.session_state:
+if "messages" not in st.session_state or "openai_messages" not in st.session_state:
     reset_session()
 
 
@@ -134,7 +134,7 @@ def medInfinitChat(user_prompt):
   st.session_state.messages.append({"role": "assistant", "content": r})
   return r
 
-    
+
 st.button("Reset", on_click=reset_session)
 
 if prompt := st.chat_input():
