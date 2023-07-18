@@ -16,7 +16,6 @@ if not openai_api_key.startswith('sk-'):
     st.warning('Please enter your OpenAI API key!', icon='⚠')
 else:
     openai.api_key = openai_api_key
-    st.session_state.llm = ChatOpenAI(temperature=0.0, model_name='gpt-3.5-turbo', verbose=True, openai_api_key=openai_api_key)
 
 
 response_schemas = [
