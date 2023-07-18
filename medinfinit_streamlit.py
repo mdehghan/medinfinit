@@ -128,9 +128,9 @@ def openAIChat(user_prompt, is_user_prompt):
 
 def medInfinitChat(user_prompt):
   st.session_state.messages.append({"role": "user", "content": user_prompt})
-  response = openAIChat(user_prompt, True)
-  st.session_state.messages.append({"role": "assistant", "content": response})
-  return response
+  r = openAIChat(user_prompt, True)
+  st.session_state.messages.append({"role": "assistant", "content": r})
+  return r
 
 def reset_session():
     st.session_state.messages = []
