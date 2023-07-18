@@ -10,13 +10,20 @@ openai_api_key = st.sidebar.text_input('OpenAI API Key')
 
 st.title("MEDinfinit Assistant Chatbot")
 
+def reset_session():
+    st.session_state.messages = []
+    st.session_state.openai_messages = [{"role": "system", "content": system_prompt}]
+
+# Initialize chat history
+if "messages" not in st.session_state or "openai_messages" not in st.session_state:
+    reset_session()
+
 MODEL_NAME = "gpt-4-0613"
 
 if not openai_api_key.startswith('sk-'):
     st.warning('Please enter your OpenAI API key!', icon='⚠')
 else:
     openai.api_key = openai_api_key
-
 
 response_schemas = [
     ResponseSchema(name="english_query", description="Translation of user prompt to English."),
@@ -66,30 +73,20 @@ def recommendTherapist(symptoms):
   # TODO(mdehghan): Fix this to return real results.
   return "Mostafa"
 
-
 recommender_function = {
-          "name": "recommend_therapist",
-          "description": "get a list of therapists based on user needs and symptoms",       
-          "parameters": {
-            "type": "object",
-            "properties": {
-              "symptoms": {
-                "description": "The symptoms mentioned by the user.",
-                "type": "string"
-              }
-            },
-            "required": ["symptoms"]
-          }
+    "name": "recommend_therapist",
+    "description": "get a list of therapists based on user needs and symptoms",       
+    "parameters": {
+      "type": "object",
+      "properties": {
+        "symptoms": {
+          "description": "The symptoms mentioned by the user.",
+          "type": "string"
         }
-
-def reset_session():
-    st.session_state.messages = []
-    st.session_state.openai_messages = [{"role": "system", "content": system_prompt}]
-
-# Initialize chat history
-if "messages" not in st.session_state or "openai_messages" not in st.session_state:
-    reset_session()
-
+      },
+      "required": ["symptoms"]
+    }
+}
 
 def openAIChat(user_prompt, is_user_prompt):
   if is_user_prompt:
