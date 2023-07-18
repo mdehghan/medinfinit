@@ -1,0 +1,22 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+openai = "*"
+langchain = "*"
+google-search-results = "*"
+tiktoken = "*"
+streamlit = "*"
+python-dotenv = "*"
+langdetect = "*"
+streamlit-chat = "*"
+streamlit-extras = "*"
+hugchat = "*"
+transformers = {extras = ["torch"], version = "*"}
+
+[dev-packages]
+
+[requires]
+python_version = "3.9"
