@@ -82,12 +82,14 @@ recommender_function = {
           }
         }
 
-
-# Initialize chat history
-if "messages" not in st.session_state:
+def reset_session():
     st.session_state.messages = []
     st.session_state.openai_messages = [{"role": "system", "content": system_prompt}]
     st.session_state.content = []
+
+# Initialize chat history
+if "messages" not in st.session_state:
+    reset_session()
 
 
 def openAIChat(user_prompt, is_user_prompt):
@@ -132,12 +134,7 @@ def medInfinitChat(user_prompt):
   st.session_state.messages.append({"role": "assistant", "content": r})
   return r
 
-def reset_session():
-    st.session_state.messages = []
-    st.session_state.openai_messages = []
-    st.session_state.content = []
     
-
 st.button("Reset", on_click=reset_session)
 
 if prompt := st.chat_input():
