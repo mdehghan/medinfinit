@@ -10,7 +10,7 @@ openai_api_key = st.sidebar.text_input('OpenAI API Key')
 
 st.title("MEDinfinit Assistant Chatbot")
 
-MODEL_NAME = "gpt-4-0613"
+MODEL_NAME = "gpt-3.5-turbo-0613" # "gpt-4-0613"
 
 response_schemas = [
     ResponseSchema(name="english_query", description="Translation of user prompt to English."),
