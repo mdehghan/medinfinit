@@ -90,6 +90,7 @@ def initialize_therapist_retreiver():
 # Initialize chat history
 if 'initialized' not in st.session_state:
     reset_session()
+    initialize_therapist_retreiver()
     st.session_state['initialized'] = True
 
 def recommendTherapist(symptoms):
