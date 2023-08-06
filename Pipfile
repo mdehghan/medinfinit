@@ -15,6 +15,7 @@ langdetect = "*"
 streamlit-chat = "*"
 streamlit-extras = "*"
 hugchat = "*"
+faiss-cpu = "*"
 sentence_transformers = "*"
 transformers = {extras = ["torch"], version = "*"}
 
