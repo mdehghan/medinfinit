@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 openai = "*"
 langchain = "*"
+openpyxl = "*"
 google-search-results = "*"
 tiktoken = "*"
 streamlit = "*"
