@@ -1,7 +1,12 @@
 import streamlit as st
 import openai
+import pandas as pd
+
 from langchain import PromptTemplate
+from langchain.docstore.document import Document
+from langchain.embeddings.huggingface import HuggingFaceEmbeddings
 from langchain.output_parsers import StructuredOutputParser, ResponseSchema
+from langchain.vectorstores import FAISS
 
 
 # load_dotenv()
@@ -65,14 +70,32 @@ def reset_session():
     st.session_state.messages = []
     st.session_state.openai_messages = [{"role": "system", "content": system_prompt}]
 
+def initialize_therapist_retreiver():
+    file_path = './TherapistInfo.xlsx'
+    # Load the XLSX file into a DataFrame
+    df = pd.read_excel(file_path)
+
+    therapistInfo = []
+
+    # ID - Name - Title - Treatment Approach - Areas of Expertise
+    for index, row in df.iterrows():
+      if not row[2] == 'nan':
+        therapistInfo.append(Document(page_content=row[4], metadata={'therapist': row[1], 'approach': row[3]}))
+
+    embeddings_model = HuggingFaceEmbeddings()
+
+    db = FAISS.from_documents(therapistInfo, embeddings_model)
+    st.session_state.retriever = db.as_retriever()
+
 # Initialize chat history
 if 'initialized' not in st.session_state:
     reset_session()
     st.session_state['initialized'] = True
 
 def recommendTherapist(symptoms):
-  # TODO(mdehghan): Fix this to return real results.
-  return "Mostafa"
+  therapist_info = (st.session_state.retriever.get_relevant_documents(symptoms))[0]
+  recommendation = therapist_info.metadata['therapist'] + 'who takes the approach ' + therapist_info.metadata['approach']
+  return recommendation
 
 recommender_function = {
     "name": "recommend_therapist",
