@@ -1,5 +1,6 @@
 import streamlit as st
 import openai
+import openpyxl
 import pandas as pd
 
 from langchain import PromptTemplate
