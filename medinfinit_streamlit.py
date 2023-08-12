@@ -1,4 +1,6 @@
 import streamlit as st
+
+import faiss
 import openai
 import openpyxl
 import pandas as pd
