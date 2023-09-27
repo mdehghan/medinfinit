@@ -20,15 +20,6 @@ st.title("MEDinfinit Assistant Chatbot")
 
 MODEL_NAME = "gpt-4-0613"
 
-# response_schemas = [
-#     ResponseSchema(name="english_query", description="Translation of user prompt to English."),
-#     ResponseSchema(name="response", description="Response to user prompt."),
-#     ResponseSchema(name="translated_response", description="translated response")
-# ]
-# output_parser = StructuredOutputParser.from_response_schemas(response_schemas)
-# format_instructions = output_parser.get_format_instructions()
-
-
 system_prompt = """
 # YOU ARE
 You are 'MedInfinit Assistant', a friendly Psychology clinic assistant.
@@ -62,12 +53,6 @@ and optionally questions to further clarify user needs or symptoms.
 Once you have enough context recommend a therapist the user can work with.
 Limit your responses to about 100 words.
 """
-
-# system_prompt = PromptTemplate(
-#     input_variables=[],
-#     template=template,
-#     partial_variables={"format_instructions": format_instructions}
-# ).format()
 
 if not openai_api_key.startswith('sk-'):
     st.warning('Please enter your OpenAI API key!', icon='⚠')
@@ -154,8 +139,6 @@ def openAIChat(user_prompt, is_user_prompt):
     return openAIChat("", False)
   
   return response.content
-  # parsed_response = output_parser.parse(response.content)
-  # return parsed_response.get('translated_response')
 
 
 def medInfinitChat(user_prompt):
