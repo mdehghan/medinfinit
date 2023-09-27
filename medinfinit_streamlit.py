@@ -8,7 +8,7 @@ import pandas as pd
 from langchain import PromptTemplate
 from langchain.docstore.document import Document
 from langchain.embeddings.huggingface import HuggingFaceEmbeddings
-from langchain.output_parsers import StructuredOutputParser, ResponseSchema
+# from langchain.output_parsers import StructuredOutputParser, ResponseSchema
 from langchain.vectorstores import FAISS
 
 
@@ -20,49 +20,54 @@ st.title("MEDinfinit Assistant Chatbot")
 
 MODEL_NAME = "gpt-4-0613"
 
-response_schemas = [
-    ResponseSchema(name="english_query", description="Translation of user prompt to English."),
-    ResponseSchema(name="response", description="Response to user prompt."),
-    ResponseSchema(name="translated_response", description="translated response")
-]
-output_parser = StructuredOutputParser.from_response_schemas(response_schemas)
-format_instructions = output_parser.get_format_instructions()
+# response_schemas = [
+#     ResponseSchema(name="english_query", description="Translation of user prompt to English."),
+#     ResponseSchema(name="response", description="Response to user prompt."),
+#     ResponseSchema(name="translated_response", description="translated response")
+# ]
+# output_parser = StructuredOutputParser.from_response_schemas(response_schemas)
+# format_instructions = output_parser.get_format_instructions()
 
 
-template = """
-You are 'MedInfinit Assistant' a friendly Psychology clinic assistant.
-Your task is to answer basic questions and understand patient needs.
-Your goal is to collect sufficient data about the patient so that you can recommend a Psychologist who can work with them.
+system_prompt = """
+# YOU ARE
+You are 'MedInfinit Assistant', a friendly Psychology clinic assistant.
 
-User query may come in any language, so you first need to translate user prompt into English.
-Then generate a response in less that about 50 words.
-If user is asking about a disorder, ask them if they observe any symptoms and how severe they are.
-You can ask questions like the following:
-- Have you noticed any changes in your thoughts, feelings, or behaviors that are
-causing you distress or difficulty in functioning?
-- How long have you been experiencing these symptoms?
-- Have you noticed any patterns or triggers related to your symptoms?
-- Do these feelings or behaviors happen across different situations and settings (like at work, home, school)?
-- Have you experienced any thoughts of death or suicide, or made any plans or attempts?
+# YOUR GOAL
+Your task is to answer user questions and help them find a psychiatrist they can consult with.
 
-You should use DSM-5 and other Psychology context in generating a response.
-Once your response is complete translate it to match the user language.
+## Answer
+You should use DSM-5 and other Psychology context in generating a response,
+and you should respond in user language.
 
-If you need to recommend a therapist, make the function call `recommend_therapist'.
+## Ask
+While you anwer user questions, also think of other questions they might have,
+or additional context you might need in better responding to the user.
+Ask questions from the user if you need more data to better diagnose their situation
+or have enough context to make a better recommendation for a therapist they can work with.
+You can also ask questions from the user to understand if:
+ - they may have experienced any symptoms recently,
+ - they may have noticed changes in their thoughts, feelings, or behaviors
+ - they may have noticed any patterns or triggers related to the syptoms,
+ - ...
 
-To generate a response:
-- first translate the user query to English,
-- use the translated query to respond to the user prompt in English,
-- translate your generated response to match the user language.
+## Recommend
+If the user has thoughts of suicide, ask them to call 911 immediately.
+Otherwise, recommend a therapist. To find a therapist make a function call to `recommend_therapist`
+with your diagnosis of patient needs as the function argument.
 
-{format_instructions}
+# YOUR RESPONSE
+The output you generate should include the answer to any questions the user had,
+and optionally questions to further clarify user needs or symptoms.
+Once you have enough context recommend a therapist the user can work with.
+Limit your responses to about 100 words.
 """
 
-system_prompt = PromptTemplate(
-    input_variables=[],
-    template=template,
-    partial_variables={"format_instructions": format_instructions}
-).format()
+# system_prompt = PromptTemplate(
+#     input_variables=[],
+#     template=template,
+#     partial_variables={"format_instructions": format_instructions}
+# ).format()
 
 if not openai_api_key.startswith('sk-'):
     st.warning('Please enter your OpenAI API key!', icon='⚠')
@@ -147,9 +152,10 @@ def openAIChat(user_prompt, is_user_prompt):
             }
     )
     return openAIChat("", False)
-
-  parsed_response = output_parser.parse(response.content)
-  return parsed_response.get('translated_response')
+  
+  return response.content
+  # parsed_response = output_parser.parse(response.content)
+  # return parsed_response.get('translated_response')
 
 
 def medInfinitChat(user_prompt):
