@@ -78,7 +78,7 @@ if 'initialized' not in st.session_state:
 
 def recommendTherapist(symptoms):
   num_therapists = len(st.session_state.therapistInfo)
-  random_therapist = st.session_state.therapist_info[random.randint(0, num_therapists)]
+  random_therapist = st.session_state.therapistInfo[random.randint(0, num_therapists)]
 
   recommendation = random_therapist[0] + 'who takes the approach ' + random_therapist[1]
   return recommendation
