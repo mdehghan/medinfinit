@@ -1,16 +1,9 @@
 import streamlit as st
 
-import faiss
 import openai
 import openpyxl
 import pandas as pd
-
-from langchain import PromptTemplate
-from langchain.docstore.document import Document
-from langchain.embeddings.huggingface import HuggingFaceEmbeddings
-# from langchain.output_parsers import StructuredOutputParser, ResponseSchema
-from langchain.vectorstores import FAISS
-
+import random
 
 # load_dotenv()
 
@@ -69,16 +62,13 @@ def initialize_therapist_retreiver():
     df = pd.read_excel(file_path)
 
     therapistInfo = []
-
     # ID - Name - Title - Treatment Approach - Areas of Expertise
     for index, row in df.iterrows():
       if not row[2] == 'nan':
-        therapistInfo.append(Document(page_content=row[4], metadata={'therapist': row[1], 'approach': row[3]}))
+        therapistInfo.append((row[1], row[3]))  # Keep Name and Treatment Approach
 
-    embeddings_model = HuggingFaceEmbeddings()
+    st.session_state.therapistInfo = therapistInfo
 
-    db = FAISS.from_documents(therapistInfo, embeddings_model)
-    st.session_state.retriever = db.as_retriever()
 
 # Initialize chat history
 if 'initialized' not in st.session_state:
@@ -87,8 +77,10 @@ if 'initialized' not in st.session_state:
     st.session_state['initialized'] = True
 
 def recommendTherapist(symptoms):
-  therapist_info = (st.session_state.retriever.get_relevant_documents(symptoms))[0]
-  recommendation = therapist_info.metadata['therapist'] + 'who takes the approach ' + therapist_info.metadata['approach']
+  num_therapists = len(st.session_state.therapistInfo)
+  random_therapist = therapist_info[random.randint(0, num_therapists)]
+
+  recommendation = random_therapist[0] + 'who takes the approach ' + random_therapist[1]
   return recommendation
 
 recommender_function = {
